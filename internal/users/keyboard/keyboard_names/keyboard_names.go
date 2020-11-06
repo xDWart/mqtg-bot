@@ -1,0 +1,26 @@
+package keyboard_names
+
+const (
+	QOS                       = "QoS: %v"
+	DATA_TYPE                 = "DataType: %v"
+	SUBSCRIPTION_TYPE         = "Type: %v"
+	RETAINED                  = "Retained: %v"
+	BEFORE_VALUE_MESSAGE_TEXT = "Before-value text"
+	AFTER_VALUE_MESSAGE_TEXT  = "After-value text"
+	EDIT_TOPIC                = "✏ Edit topic"
+	ADD_BUTTON                = "➕ Add button"
+	ADD_COMMAND               = "➕ Add command"
+	RENAME_FOLDER             = "✏ Rename folder"
+	RENAME_BUTTON             = "✏ Rename button"
+	ADD_SUBSCRIPTION          = "➕ Add subscription"
+	ADD_SUB_CHART             = "➕ Add sub chart"
+	DELETE_SUBSCRIPTION       = "✖ Delete subscription"
+	DELETE                    = "✖"
+	DELETE_FOLDER             = "✖ Delete folder"
+	DELETE_BUTTON             = "✖ Delete button"
+	DELETE_COMMAND            = "✖ Delete command"
+	BACK_TO_LIST              = "⬅ Back to list"
+	BACK_TO_MENU              = "⬅ Back to menu"
+	BACK                      = "⬅ Back"
+	YES                       = "✔ Yes"
+)

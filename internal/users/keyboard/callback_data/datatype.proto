@@ -1,0 +1,53 @@
+// protoc --go_out=plugins=grpc:. internal/users/keyboard/callback_data/*.proto
+syntax = "proto3";
+
+package callback_data;
+
+message QueryDataType {
+    int64 message_id = 1;
+    KeyboardType  keyboard = 2;
+    repeated int32	path   = 3;
+    ActionType action     = 4;
+    int32 int_value = 6;
+    bool bool_value  = 7;
+    int32 index  = 8;
+}
+
+enum KeyboardType {
+    NULL = 0;
+    CONNECTION = 1;
+    SUBSCRIPTIONS = 2;
+    PUBLISH = 3;
+    BUTTONS = 4;
+    COMMAND = 5;
+    CHART = 6;
+}
+
+enum ActionType {
+    EMPTY = 0;
+    EDIT = 1;
+    DELETE = 2;
+    SWITCH_QOS = 3;
+    SWITCH_RETAINED = 4;
+    SWITCH_SUB_DATA_TYPE = 5;
+    BEFORE_VALUE_TEXT = 6;
+    AFTER_VALUE_TEXT = 7;
+    BACK_TO_MENU = 8;
+    BACK_TO_LIST = 9;
+    SWITCH_BUTTON_TYPE = 10;
+    ADD_BUTTON = 11;
+    ADD_SUBSCRIPTION = 12;
+    ADD_COMMAND = 13;
+    SWITCH_SUBSCRIPTION_TYPE = 14;
+    SWITCH_ADDED_SUBSCRIPTION_TYPE = 15;
+    SWITCH_ADDED_SUBSCRIPTION_QOS = 16;
+    SWITCH_ADDED_SUBSCRIPTION_DATA_TYPE = 17;
+    EDIT_COMMAND_NAME = 18;
+    EDIT_COMMAND_TOPIC = 19;
+    EDIT_COMMAND_VALUE = 20;
+    DELETE_COMMAND = 21;
+    EDIT_COMMAND = 22;
+    SWITCH_SUBSCRIPTION = 23;
+    DELETE_SUB_CHART = 24;
+    ADD_SUB_CHART = 25;
+}
