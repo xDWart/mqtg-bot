@@ -55,9 +55,6 @@ func (user *User) ConfigureConnection() *common.BotMessage {
 	}
 
 	inlineText, inlineKeyboard := keyboard.GetConnectionStringKeyboard(user.MqttUrl)
-	user.state = state.StateStruct{
-		State: state.CONFIGURE_CONNECTION_STATE,
-	}
 
 	return &common.BotMessage{
 		InlineText:     inlineText,
@@ -109,8 +106,12 @@ func (user *User) isMqttConnected() bool {
 }
 
 func (user *User) disconnectMQTT() {
-	user.mqtt.Disconnect(100) // ms wait timeout
-	user.setConnected(false)
+	if user.mqtt != nil {
+		user.mqtt.Disconnect(100) // ms wait timeout
+	}
+	if user.Connected {
+		user.setConnected(false)
+	}
 }
 
 func (user *User) getMainMenu() *tgbotapi.ReplyKeyboardMarkup {
@@ -150,25 +151,19 @@ func (user *User) SaveMenuIntoDB() {
 }
 
 func (user *User) processConnectionString(mqttUrl string) *common.BotMessage {
-	if user.isMqttConnected() {
-		user.disconnectMQTT()
-	}
+	user.disconnectMQTT() // to synchronize flags
 
 	if len(mqttUrl) > 0 { // will use old string if its called from callback
 		user.MqttUrl = mqttUrl
 	}
 	err := user.connectMqttAndSubscribe()
 
-	user.state.Reset()
-
 	var userAnswer common.BotMessage
-
 	if err != nil {
 		userAnswer.MainText = fmt.Sprintf("Could not connect to MQTT url: %v. Error: %v", user.MqttUrl, err)
 	} else {
 		userAnswer.MainText = "Successfully connected to MQTT broker"
 	}
-
 	userAnswer.MainMenu = user.getMainMenu()
 
 	return &userAnswer

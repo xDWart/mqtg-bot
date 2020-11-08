@@ -37,10 +37,6 @@ func (user *User) ProcessMessage(messageData []byte, isItPhoto bool) *common.Bot
 	}
 
 	switch user.state.State {
-	case state.CONFIGURE_CONNECTION_STATE: // expect MQTT connection URL
-		mqttUrl := string(messageData)
-		return user.processConnectionString(mqttUrl)
-
 	case state.PUBLISH_TOPIC_STATE:
 		user.state = state.StateStruct{
 			State:           state.PUBLISH_VALUE_STATE,
@@ -174,6 +170,10 @@ func (user *User) ProcessMessage(messageData []byte, isItPhoto bool) *common.Bot
 	default: // it could be any other button
 		message := string(messageData)
 
+		if !user.isMqttConnected() {
+			return user.processConnectionString(message)
+		}
+
 		// pre action
 		switch message {
 		case button_names.DISCONNECT:
@@ -203,13 +203,6 @@ func (user *User) ProcessMessage(messageData []byte, isItPhoto bool) *common.Bot
 			return &common.BotMessage{
 				InlineText:     inlineText,
 				InlineKeyboard: inlineKeyboard,
-			}
-		}
-
-		if !user.isMqttConnected() {
-			return &common.BotMessage{
-				MainText: "There is no connection to MQTT",
-				MainMenu: &menu.ConfigureConnectionMenu,
 			}
 		}
 
