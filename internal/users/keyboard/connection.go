@@ -6,7 +6,7 @@ import (
 )
 
 func GetConnectionStringKeyboard(mqttUrl string) (string, *tgbotapi.InlineKeyboardMarkup) {
-	inlineText := "Send me your MQTT broker connection URL in the following format of <code>(tcp|ssl|ws|wss)://user:password@host:port/path</code>"
+	inlineText := "Send me your MQTT broker connection URL in the following format of <code>tcp|ssl|ws|wss://user:password@host:port/path</code>"
 
 	if len(mqttUrl) > 0 {
 		inlineKeyboard := tgbotapi.NewInlineKeyboardMarkup(

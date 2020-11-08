@@ -100,6 +100,10 @@ func (user *User) setConnected(value bool) {
 	user.db.Model(&user.DbUser).Update("connected", value)
 }
 
+func (user *User) saveMqttUrl() {
+	user.db.Model(&user.DbUser).Update("mqtt_url", user.MqttUrl)
+}
+
 func (user *User) isMqttConnected() bool {
 	return user.Connected && user.mqtt != nil && user.mqtt.IsConnected()
 }
@@ -123,6 +127,7 @@ func (user *User) connectMqttAndSubscribe() error {
 		return err
 	}
 	user.setConnected(true)
+	user.saveMqttUrl()
 	log.Printf("Connect user %v to mqtt", user.UserName)
 
 	for _, subscription := range user.Subscriptions {
