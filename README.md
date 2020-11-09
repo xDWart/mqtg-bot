@@ -7,6 +7,11 @@
 
 ![Gopher Bot](https://github.com/xDWart/mqtg-bot/raw/master/assets/kdpv.jpg)
 
+## Articles
+
+- [Flexible MQTT-telegram-bot for IoT](https://xd-wart.medium.com/flexible-mqtt-telegram-bot-for-iot-70d567edfb2e) (En, Medium)
+- [(Не)очередной MQTT-телеграм-бот для IoT](https://habr.com/ru/post/526672/) (Ru, Habr)
+
 ## Introduction
 
 mqtg-bot is an easy-to-configure for your needs MQTT client Telegram bot. Without programming knowledge you can configure the bot to send various commands (turn on the light, open the garage door, etc.) or request any information (the temperature in the house, the state of the heating system, etc.) or receive frames from security camera. In general the functionality of this solution is very rich.
