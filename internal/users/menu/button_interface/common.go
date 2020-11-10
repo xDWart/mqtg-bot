@@ -64,17 +64,61 @@ func parseDataMap(dataMap *map[string]interface{}) ButtonI {
 	switch button_types.ButtonType(fType) {
 	case button_types.MULTI_VALUE:
 		var multiValueButton MultiValueButton
-		// заполнение нужных полей
+
+		name, _ := (*dataMap)["Name"].(string)
+		multiValueButton.Name = name
+
+		commands, _ := (*dataMap)["Commands"].([]interface{})
+		multiValueButton.Commands = make([]*CommandType, 0, len(commands))
+		for _, command := range commands {
+			commandI, ok := command.(map[string]interface{})
+			if ok {
+				var commandT CommandType
+				commandT.Name, _ = commandI["Name"].(string)
+				commandT.Topic, _ = commandI["Topic"].(string)
+				commandT.Value, _ = commandI["Value"].(string)
+				commandT.Qos, _ = commandI["Qos"].(byte)
+				commandT.Retained, _ = commandI["Retained"].(bool)
+				multiValueButton.Commands = append(multiValueButton.Commands, &commandT)
+			}
+		}
+
 		outButton = &multiValueButton
 
 	case button_types.SINGLE_VALUE:
 		var singleValueButton SingleValueButton
-		// заполнение нужных полей
+
+		command, ok := (*dataMap)["Command"].(map[string]interface{})
+		if ok {
+			singleValueButton.Command.Name, _ = command["Name"].(string)
+			singleValueButton.Command.Topic, _ = command["Topic"].(string)
+			singleValueButton.Command.Value, _ = command["Value"].(string)
+			singleValueButton.Command.Qos, _ = command["Qos"].(byte)
+			singleValueButton.Command.Retained, _ = command["Retained"].(bool)
+		}
 		outButton = &singleValueButton
 
 	case button_types.TOGGLE:
 		var toggleButton ToggleButton
-		// заполнение нужных полей
+		state, _ := (*dataMap)["State"].(float64)
+		toggleButton.State = int(state)
+
+		commands, _ := (*dataMap)["Commands"].([]interface{})
+
+		toggleButton.Commands = make([]*CommandType, 0, len(commands))
+		for _, command := range commands {
+			commandI, ok := command.(map[string]interface{})
+			if ok {
+				var commandT CommandType
+				commandT.Name, _ = commandI["Name"].(string)
+				commandT.Topic, _ = commandI["Topic"].(string)
+				commandT.Value, _ = commandI["Value"].(string)
+				commandT.Qos, _ = commandI["Qos"].(byte)
+				commandT.Retained, _ = commandI["Retained"].(bool)
+				toggleButton.Commands = append(toggleButton.Commands, &commandT)
+			}
+		}
+
 		outButton = &toggleButton
 
 	case button_types.FOLDER:
@@ -82,7 +126,6 @@ func parseDataMap(dataMap *map[string]interface{}) ButtonI {
 		folderButton.Name, _ = (*dataMap)["Name"].(string)
 		buttons, _ := (*dataMap)["Buttons"].([]interface{})
 
-		// рекурсивный вызов парсинга для дерева
 		folderButton.Buttons = make([]ButtonI, 0, len(buttons))
 		for _, button := range buttons {
 			buttonMap, ok := button.(map[string]interface{})
@@ -96,17 +139,27 @@ func parseDataMap(dataMap *map[string]interface{}) ButtonI {
 
 	case button_types.SYSTEM:
 		var systemButton SystemButton
-		// заполнение нужных полей
+		systemButton.Name, _ = (*dataMap)["Name"].(string)
 		outButton = &systemButton
 
 	case button_types.PRINT_LAST_SUB_VALUE:
 		var printLastValueButton PrintLastValueButton
-		// заполнение нужных полей
+		printLastValueButton.Name, _ = (*dataMap)["Name"].(string)
+		subscriptionID, _ := (*dataMap)["SubscriptionID"].(float64)
+		printLastValueButton.SubscriptionID = int(subscriptionID)
 		outButton = &printLastValueButton
 
 	case button_types.DRAW_CHART:
 		var showCharButton DrawChartButton
-		// заполнение нужных полей
+		showCharButton.Name, _ = (*dataMap)["Name"].(string)
+
+		subscriptions, _ := (*dataMap)["Subscriptions"].([]interface{})
+		showCharButton.Subscriptions = make([]int, 0, len(subscriptions))
+		for _, subscription := range subscriptions {
+			subscriptionID, _ := subscription.(float64)
+			showCharButton.Subscriptions = append(showCharButton.Subscriptions, int(subscriptionID))
+		}
+
 		outButton = &showCharButton
 
 	default:
