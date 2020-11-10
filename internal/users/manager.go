@@ -30,13 +30,13 @@ func InitManager(db *gorm.DB, subscriptionCh chan mqtt.SubscriptionMessage) *Man
 
 func (um *Manager) LoadAllConnectedUsers() {
 	// select all users connected to MQTT
-	var dbUsers []models.DbUser
+	var dbUsers []*models.DbUser
 	um.db.Where("connected = ?", true).Find(&dbUsers)
 
 	// convert dbUser into UserType
 	for _, dbUser := range dbUsers {
 		log.Printf("Loaded connected user %v", dbUser.UserName)
-		um.LoadDatabaseUserIntoBotUsers(&dbUser)
+		um.LoadDatabaseUserIntoBotUsers(dbUser)
 	}
 
 	um.UpdateTotalUsers()
