@@ -1,9 +1,7 @@
 package models
 
 import (
-	"fmt"
 	"github.com/jinzhu/gorm"
-	"strings"
 	"sync"
 	"time"
 )
@@ -22,6 +20,7 @@ type Subscription struct {
 	AfterValueText            string `gorm:"type:text"`
 	LastValueFormattedMessage string `gorm:"type:text"`
 	LastValuePayload          []byte `gorm:"type:bytea"`
+	JsonPathToData            string `gorm:"type:varchar(255)"`
 }
 
 type SubscriptionData struct {
@@ -79,18 +78,4 @@ func (st SubscriptionType) String() string {
 
 func (st SubscriptionType) GetNext() SubscriptionType {
 	return (st + 1) % COUNT_SUBSCRIPTION_TYPES
-}
-
-func FormatMessage(subscription *Subscription, fullTopic string, payload []byte) string {
-	beforeValueText := strings.ReplaceAll(subscription.BeforeValueText, "%s", "<code>"+subscription.Topic+"</code>")
-	beforeValueText = strings.ReplaceAll(beforeValueText, "%t", "<code>"+fullTopic+"</code>")
-
-	if subscription.DataType == IMAGE_DATA_TYPE {
-		return beforeValueText
-	}
-
-	afterValueText := strings.ReplaceAll(subscription.AfterValueText, "%s", "<code>"+subscription.Topic+"</code>")
-	afterValueText = strings.ReplaceAll(afterValueText, "%t", "<code>"+fullTopic+"</code>")
-
-	return fmt.Sprintf("%v %v %v", beforeValueText, string(payload), afterValueText)
 }

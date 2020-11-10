@@ -50,4 +50,5 @@ enum ActionType {
     SWITCH_SUBSCRIPTION = 23;
     DELETE_SUB_CHART = 24;
     ADD_SUB_CHART = 25;
+    EDIT_JSON_PATH = 26;
 }

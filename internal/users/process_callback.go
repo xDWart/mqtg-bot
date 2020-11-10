@@ -200,6 +200,15 @@ func (user *User) processSubscriptionCallback(callbackData *callback_data.QueryD
 
 		return newText, newInlineKeyboard, nil
 
+	case callback_data.ActionType_EDIT_JSON_PATH:
+		newText, newInlineKeyboard := keyboard.GetSubscriptionJsonPathEditKeyboard(subscription, subscriptionIndex)
+		user.state = state.StateStruct{
+			EditableIndex: subscriptionIndex,
+			LastMessageID: int(callbackData.MessageId),
+			State:         state.EDIT_JSON_PATH_STATE,
+		}
+		return newText, newInlineKeyboard, nil
+
 	case callback_data.ActionType_BACK_TO_MENU:
 		user.state.Reset()
 	}

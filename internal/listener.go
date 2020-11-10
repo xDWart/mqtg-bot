@@ -1,11 +1,14 @@
 package internal
 
 import (
+	"encoding/json"
 	"fmt"
+	"github.com/oliveagle/jsonpath"
 	"log"
 	"mqtg-bot/internal/common"
 	"mqtg-bot/internal/models"
 	"mqtg-bot/internal/users/menu/button_names"
+	"strings"
 	"time"
 )
 
@@ -23,16 +26,38 @@ func (bot *TelegramBot) StartBotListener() {
 		case subscriptionMessage := <-bot.subscriptionCh:
 			subscriptionMessage.Subscription.UserMutex.Lock()
 
-			subStr := fmt.Sprintf("(%v, id: %v, type: %v)", subscriptionMessage.Message.Topic(), subscriptionMessage.Subscription.ID, subscriptionMessage.Subscription.SubscriptionType)
+			var formattedMessage string
 
+			beforeValueText := strings.ReplaceAll(subscriptionMessage.Subscription.BeforeValueText, "%s", "<code>"+subscriptionMessage.Subscription.Topic+"</code>")
+			beforeValueText = strings.ReplaceAll(beforeValueText, "%t", "<code>"+subscriptionMessage.Message.Topic()+"</code>")
+
+			subStr := fmt.Sprintf("(%v, id: %v, type: %v)", subscriptionMessage.Message.Topic(), subscriptionMessage.Subscription.ID, subscriptionMessage.Subscription.SubscriptionType)
 			if subscriptionMessage.Subscription.DataType == models.IMAGE_DATA_TYPE {
 				log.Printf("Received new subscription %v data: %v bytes", subStr, len(subscriptionMessage.Message.Payload()))
+				formattedMessage = beforeValueText
+				subscriptionMessage.Subscription.LastValuePayload = subscriptionMessage.Message.Payload()
 			} else {
 				log.Printf("Received new subscription %v data: %v", subStr, string(subscriptionMessage.Message.Payload()))
+
+				afterValueText := strings.ReplaceAll(subscriptionMessage.Subscription.AfterValueText, "%s", "<code>"+subscriptionMessage.Subscription.Topic+"</code>")
+				afterValueText = strings.ReplaceAll(afterValueText, "%t", "<code>"+subscriptionMessage.Message.Topic()+"</code>")
+
+				payload := subscriptionMessage.Message.Payload()
+				if len(subscriptionMessage.Subscription.JsonPathToData) > 1 {
+					var jsonData interface{}
+					err := json.Unmarshal(payload, &jsonData)
+					if err == nil {
+						result, err := jsonpath.JsonPathLookup(jsonData, subscriptionMessage.Subscription.JsonPathToData)
+						if err == nil {
+							payload = []byte(fmt.Sprintf("%v", result))
+						}
+					}
+				}
+
+				formattedMessage = fmt.Sprintf("%v %v %v", beforeValueText, string(payload), afterValueText)
 			}
 
-			subscriptionMessage.Subscription.LastValueFormattedMessage = models.FormatMessage(subscriptionMessage.Subscription, subscriptionMessage.Message.Topic(), subscriptionMessage.Message.Payload())
-			subscriptionMessage.Subscription.LastValuePayload = subscriptionMessage.Message.Payload()
+			subscriptionMessage.Subscription.LastValueFormattedMessage = formattedMessage
 			bot.db.Save(subscriptionMessage.Subscription)
 
 			// need store

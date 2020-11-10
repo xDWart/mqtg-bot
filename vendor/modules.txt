@@ -38,6 +38,9 @@ github.com/lib/pq/oid
 github.com/lib/pq/scram
 # github.com/matttproud/golang_protobuf_extensions v1.0.1
 github.com/matttproud/golang_protobuf_extensions/pbutil
+# github.com/oliveagle/jsonpath v0.0.0-20180606110733-2e52cf6e6852
+## explicit
+github.com/oliveagle/jsonpath
 # github.com/prometheus/client_golang v1.7.0
 ## explicit
 github.com/prometheus/client_golang/prometheus

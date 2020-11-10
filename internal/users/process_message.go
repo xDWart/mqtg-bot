@@ -69,6 +69,7 @@ func (user *User) ProcessMessage(messageData []byte, isItPhoto bool) *common.Bot
 			Qos:              user.state.Qos,
 			SubscriptionType: user.state.SubscriptionType,
 			DataType:         user.state.SubscriptionDataType,
+			JsonPathToData:   "$",
 		}
 
 		subscriptionIndex := user.subscribe(newSubscription)
@@ -80,7 +81,7 @@ func (user *User) ProcessMessage(messageData []byte, isItPhoto bool) *common.Bot
 			InlineKeyboard: inlineKeyboard,
 		}
 
-	case state.EDIT_BEFORE_VALUE_MESSAGE_TEXT_STATE, state.EDIT_AFTER_VALUE_MESSAGE_TEXT_STATE, state.EDIT_SUBSCRIPTION_TOPIC_STATE:
+	case state.EDIT_BEFORE_VALUE_MESSAGE_TEXT_STATE, state.EDIT_AFTER_VALUE_MESSAGE_TEXT_STATE, state.EDIT_SUBSCRIPTION_TOPIC_STATE, state.EDIT_JSON_PATH_STATE:
 		defer user.state.Reset()
 
 		subscriptionIndex := user.state.EditableIndex
@@ -102,6 +103,8 @@ func (user *User) ProcessMessage(messageData []byte, isItPhoto bool) *common.Bot
 			user.mqtt.Unsubscribe(subscription)
 			subscription.Topic = message
 			user.mqtt.Subscribe(subscription)
+		case state.EDIT_JSON_PATH_STATE:
+			subscription.JsonPathToData = message
 		}
 
 		user.db.Save(subscription)

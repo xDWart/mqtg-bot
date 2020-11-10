@@ -5,6 +5,7 @@ const (
 	DATA_TYPE                 = "DataType: %v"
 	SUBSCRIPTION_TYPE         = "Type: %v"
 	RETAINED                  = "Retained: %v"
+	JSON_PATH_TO_DATA         = "JsonPath: %v"
 	BEFORE_VALUE_MESSAGE_TEXT = "Before-value text"
 	AFTER_VALUE_MESSAGE_TEXT  = "After-value text"
 	EDIT_TOPIC                = "✏ Edit topic"

@@ -165,6 +165,27 @@ func GetSubscriptionBeforeAfterValueTextEditKeyboard(action callback_data.Action
 	return inlineText, &inlineKeyboard
 }
 
+func GetSubscriptionJsonPathEditKeyboard(subscription *models.Subscription, subscriptionIndex int32) (string, *tgbotapi.InlineKeyboardMarkup) {
+	inlineText := fmt.Sprintf("Current <code>JSON path</code> is: <code>%v</code>", subscription.JsonPathToData)
+	inlineText += "\nSend me the new value if you want to edit it"
+	inlineText += "\nFor example: <code>$.home.sensors[0].temperature</code>"
+	inlineText += "\nUse <code>$</code> to receive whole subscription data"
+
+	inlineKeyboard := tgbotapi.NewInlineKeyboardMarkup(
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData(
+				keyboard_names.BACK_TO_MENU,
+				callback_data.QueryDataType{
+					Keyboard: callback_data.KeyboardType_SUBSCRIPTIONS,
+					Path:     []int32{subscriptionIndex},
+					Action:   callback_data.ActionType_BACK_TO_MENU,
+				}.GetBase64ProtoString()),
+		),
+	)
+
+	return inlineText, &inlineKeyboard
+}
+
 func GetSubscriptionEditKeyboard(subscription *models.Subscription, subscriptionIndex int32) (string, *tgbotapi.InlineKeyboardMarkup) {
 	inlineText := fmt.Sprintf("Edit the subscription <code>%v</code>:", subscription.Topic)
 
@@ -195,6 +216,15 @@ func GetSubscriptionEditKeyboard(subscription *models.Subscription, subscription
 					Path:     []int32{subscriptionIndex},
 					Action:   callback_data.ActionType_SWITCH_SUB_DATA_TYPE,
 					IntValue: int32(subscription.DataType.GetNext()),
+				}.GetBase64ProtoString()),
+		),
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData(
+				fmt.Sprintf(keyboard_names.JSON_PATH_TO_DATA, subscription.JsonPathToData),
+				callback_data.QueryDataType{
+					Keyboard: callback_data.KeyboardType_SUBSCRIPTIONS,
+					Path:     []int32{subscriptionIndex},
+					Action:   callback_data.ActionType_EDIT_JSON_PATH,
 				}.GetBase64ProtoString()),
 		),
 		tgbotapi.NewInlineKeyboardRow(
