@@ -25,11 +25,10 @@ type Subscription struct {
 
 type SubscriptionData struct {
 	gorm.Model
-	SubscriptionID   uint
-	FormattedMessage string `gorm:"type:text"`
-	DateTime         time.Time
-	DataType         SubscriptionDataType `gorm:"default:0"`
-	Data             []byte               `gorm:"type:bytea"`
+	SubscriptionID uint
+	DateTime       time.Time
+	DataType       SubscriptionDataType `gorm:"default:0"`
+	Data           []byte               `gorm:"type:bytea"`
 }
 
 type SubscriptionDataType byte

@@ -29,7 +29,6 @@ func Connect(dbUser *models.DbUser, subscriptionCh chan SubscriptionMessage) (*C
 	clientOptions.SetUsername(uri.User.Username())
 	password, _ := uri.User.Password()
 	clientOptions.SetPassword(password)
-	clientOptions.SetClientID(dbUser.UserName)
 
 	client := mqtt.NewClient(clientOptions)
 

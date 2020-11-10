@@ -55,6 +55,7 @@ func (bot *TelegramBot) StartBotListener() {
 				}
 
 				formattedMessage = fmt.Sprintf("%v %v %v", beforeValueText, string(payload), afterValueText)
+				subscriptionMessage.Subscription.LastValuePayload = payload
 			}
 
 			subscriptionMessage.Subscription.LastValueFormattedMessage = formattedMessage
@@ -65,11 +66,10 @@ func (bot *TelegramBot) StartBotListener() {
 			case models.PRINT_AND_STORE_MESSAGE_SUBSCRIPTION_TYPE,
 				models.SILENT_STORE_MESSAGE_SUBSCRIPTION_TYPE:
 				newData := models.SubscriptionData{
-					SubscriptionID:   subscriptionMessage.Subscription.ID,
-					FormattedMessage: subscriptionMessage.Subscription.LastValueFormattedMessage,
-					DateTime:         time.Now(),
-					DataType:         subscriptionMessage.Subscription.DataType,
-					Data:             subscriptionMessage.Message.Payload(),
+					SubscriptionID: subscriptionMessage.Subscription.ID,
+					DateTime:       time.Now(),
+					DataType:       subscriptionMessage.Subscription.DataType,
+					Data:           subscriptionMessage.Subscription.LastValuePayload,
 				}
 				if subscriptionMessage.Subscription.DataType == models.IMAGE_DATA_TYPE {
 					log.Printf("Store new subscription %v image data: %v bytes", subStr, len(newData.Data))
@@ -87,7 +87,7 @@ func (bot *TelegramBot) StartBotListener() {
 					bot.NewPhotoUpload(
 						subscriptionMessage.Subscription.ChatID,
 						subscriptionMessage.Subscription.LastValueFormattedMessage,
-						subscriptionMessage.Message.Payload(),
+						subscriptionMessage.Subscription.LastValuePayload,
 						nil,
 					)
 				} else {

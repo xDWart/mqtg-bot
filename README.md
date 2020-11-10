@@ -31,9 +31,9 @@ mqtg-bot is an easy-to-configure for your needs MQTT client Telegram bot. Withou
     - [x] Text/Image data types
     - [x] Pre/post value displaying text
     - [x] Storing data into DB
+    - [x] Parse data by JsonPath expressions
     - [ ] Data storage management
     - [ ] Publish action on receiving
-    - [ ] Parse data from message by regexp
     - [ ] Voice data type
 - [x] Publishing to a topic:
     - [x] Selectable QoS/Retained
