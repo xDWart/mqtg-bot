@@ -56,11 +56,16 @@ func NewPostgresConnection() *gorm.DB {
 
 	var db *gorm.DB
 
-	for i := 0; i < 10; i++ {
-		userPassword, _ := uri.User.Password()
-		connectStr := fmt.Sprintf("host=%v port=%v user=%v dbname=%v password=%v sslmode=disable", uri.Hostname(), uri.Port(), uri.User.Username(), strings.TrimPrefix(uri.Path, "/"), userPassword)
-		// log.Printf("Connect string: %v", connectStr)
+	userPassword, _ := uri.User.Password()
+	connectStr := fmt.Sprintf("host=%v port=%v user=%v dbname=%v password=%v", uri.Hostname(), uri.Port(), uri.User.Username(), strings.TrimPrefix(uri.Path, "/"), userPassword)
 
+	sslmode := os.Getenv("DB_SSLMODE")
+	if len(sslmode) > 0 {
+		connectStr += fmt.Sprintf(" sslmode=%v", sslmode)
+	}
+	// log.Printf("Connect string: %v", connectStr)
+
+	for i := 0; i < 10; i++ {
 		db, err = gorm.Open("postgres", connectStr)
 		if err == nil {
 			break
