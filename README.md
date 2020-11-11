@@ -111,6 +111,9 @@ heroku git:remote -a *YOUR_APP_NAME*
 # add TELEGRAM_BOT_TOKEN environment
 heroku config:set TELEGRAM_BOT_TOKEN=*BOT_ACCESS_TOKEN*
 
+# set version of Go
+heroku config:set GOVERSION=go1.15
+
 # attach Postgres add-on
 heroku addons:create heroku-postgresql:hobby-dev 
 
