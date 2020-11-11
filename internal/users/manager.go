@@ -2,8 +2,8 @@ package users
 
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/jinzhu/gorm"
 	"github.com/prometheus/client_golang/prometheus"
+	"gorm.io/gorm"
 	"log"
 	"mqtg-bot/internal/models"
 	"mqtg-bot/internal/users/menu"
@@ -43,9 +43,9 @@ func (um *Manager) LoadAllConnectedUsers() {
 }
 
 func (um *Manager) UpdateTotalUsers() {
-	var count float64
+	var count int64
 	um.db.Model(&models.DbUser{}).Count(&count)
-	um.metrics.numOfTotalUsers.Set(count)
+	um.metrics.numOfTotalUsers.Set(float64(count))
 }
 
 func (um *Manager) GetUserByChatIdFromUpdate(update *tgbotapi.Update) *User {
@@ -84,7 +84,7 @@ func (um *Manager) GetUserByChatIdFromUpdate(update *tgbotapi.Update) *User {
 }
 
 func (um *Manager) LoadDatabaseUserIntoBotUsers(dbUser *models.DbUser) *User {
-	um.db.Model(dbUser).Order("subscriptions.id").Related(&dbUser.Subscriptions)
+	um.db.Where("db_user_id = ?", dbUser.ID).Order("subscriptions.id").Find(&dbUser.Subscriptions)
 
 	botUser := &User{
 		DbUser:         dbUser,
@@ -93,7 +93,7 @@ func (um *Manager) LoadDatabaseUserIntoBotUsers(dbUser *models.DbUser) *User {
 		menu:           &menu.MainMenu{},
 	}
 
-	if len(dbUser.DbMenu.RawMessage) > 0 {
+	if len(dbUser.DbMenu) > 0 {
 		botUser.menu.LoadMenuFromJsonb(dbUser.DbMenu)
 	}
 

@@ -2,8 +2,8 @@ package internal
 
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/jinzhu/gorm"
 	"github.com/prometheus/client_golang/prometheus"
+	"gorm.io/gorm"
 	"log"
 	"mqtg-bot/internal/database"
 	"mqtg-bot/internal/users"
@@ -39,7 +39,7 @@ func InitTelegramBot() *TelegramBot {
 
 	bot := &TelegramBot{
 		BotAPI:          botApi,
-		db:              database.NewPostgresConnection(),
+		db:              database.NewDatabaseConnection(),
 		subscriptionCh:  make(chan mqtt.SubscriptionMessage),
 		metrics:         InitPrometheusMetrics(),
 		wg:              &sync.WaitGroup{},
@@ -92,7 +92,11 @@ func (bot *TelegramBot) Shutdown() {
 
 	bot.StopReceivingUpdates()
 	close(bot.shutdownChannel)
-	bot.db.Close()
+
+	sqlDB, err := bot.db.DB()
+	if err == nil {
+		sqlDB.Close()
+	}
 }
 
 func (bot *TelegramBot) Wait() {

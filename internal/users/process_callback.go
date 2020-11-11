@@ -432,11 +432,8 @@ func (user *User) processChartMenuCallback(callbackData *callback_data.QueryData
 		}
 		subscription := user.Subscriptions[subscriptionUserIndex]
 
-		user.db.
-			Model(subscription).
-			Where("subscription_data.date_time > ?", thresholdValue).
-			Order("subscription_data.date_time").
-			Related(&subscription.CollectedData)
+		user.db.Where("subscription_data.date_time > ?", thresholdValue).
+			Order("subscription_data.date_time").Find(&subscription.CollectedData)
 
 		chartTimeSeries := chart.TimeSeries{
 			Name: subscription.Topic,

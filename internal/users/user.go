@@ -3,8 +3,7 @@ package users
 import (
 	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/jinzhu/gorm"
-	"github.com/jinzhu/gorm/dialects/postgres"
+	"gorm.io/gorm"
 	"log"
 	"mqtg-bot/internal/common"
 	"mqtg-bot/internal/models"
@@ -146,7 +145,7 @@ func (user *User) SaveMenuIntoDB() {
 		log.Printf("Menu marshal error: %v. Menu: %#v", err, user.menu.UserButtons)
 		return
 	}
-	user.DbMenu = postgres.Jsonb{jsonMenu}
+	user.DbMenu = jsonMenu
 	user.db.Save(&user.DbUser)
 }
 

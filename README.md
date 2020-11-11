@@ -26,6 +26,9 @@ mqtg-bot is an easy-to-configure for your needs MQTT client Telegram bot. Withou
 
 - [x] Connecting to MQTT broker
     - [x] tcp / ssl / ws / wss
+- [x] Supported databases
+    - [x] Postgres
+    - [x] SQLite
 - [x] Subscribing to a topic:
     - [x] Selectable QoS/Retained
     - [x] Text/Image data types
@@ -57,29 +60,26 @@ Clone this repository:
 git clone https://github.com/xDWart/mqtg-bot
 ```
 
-Message [@BotFather](https://telegram.me/BotFather) `/newbot` command to create a bot and get its HTTP API access token.
+Message [@BotFather](https://telegram.me/BotFather) `/newbot` command to create a bot and get his HTTP API access token.
 
-#### Required environment variables
+#### Environment variables
 
-- `TELEGRAM_BOT_TOKEN` (HTTP API access token)
-- `DATABASE_URL` **or** `POSTGRES_HOST`, `POSTGRES_PORT`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`
+- `TELEGRAM_BOT_TOKEN` - bot HTTP API access token, required
+- `DATABASE_URL` - Postgres connection string in the following format: `postgres://user:password@host:port/db`
+- `SQLITE_PATH` - path to SQLite database
 
 Notes: 
-1. `DATABASE_URL` must have the following format: `postgres://user:password@host:port/db`
+1. Only `TELEGRAM_BOT_TOKEN` env is required
+1. If `DATABASE_URL` env is omitted, or a Postgres connection error occurred, SQLite will be used
+1. If `SQLITE_PATH` env is omitted, `mqtg.db` will be used by default as a SQLite database
 1. You can create the `.env` file in the root of the project and insert your key/value environment variable pairs in the following format of `KEY=VALUE`
 
 #### Local running
 
-If you don't have Postgres, the easiest way to get it is to run it under Docker:
-
-```sh
-docker run --name some-postgres -e POSTGRES_PASSWORD=... -p 5432:5432 -d postgres
-```
-
 You can run mqtg-bot with environment variables:
 
 ```sh
-TELEGRAM_BOT_TOKEN=... POSTGRES_PASSWORD=... go run main.go
+TELEGRAM_BOT_TOKEN=... go run main.go
 ```
 
 or if you've already created the `.env` file:
@@ -92,21 +92,6 @@ go run main.go
 
 ```sh
 docker run -e TELEGRAM_BOT_TOKEN=... -e DATABASE_URL=... --network=host owart/mqtg-bot
-```
-
-#### Running both mqtg-bot and Postgres with Docker Compose
-
-Create a `.env` file in the root of the project and insert your key/value environment variable pairs in the following format of `KEY=VALUE`.
-
-```sh
-TELEGRAM_BOT_TOKEN=*BOT_ACCESS_TOKEN*
-POSTGRES_PASSWORD=password
-```
-
-Run docker-compose:
-
-```sh
-docker-compose up --build
 ```
 
 #### Heroku running
