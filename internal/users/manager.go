@@ -35,7 +35,7 @@ func (um *Manager) LoadAllConnectedUsers() {
 
 	// convert dbUser into UserType
 	for _, dbUser := range dbUsers {
-		log.Printf("Loaded connected user %v", dbUser.UserName)
+		log.Printf("Loaded connected user %v (Chat.ID %v)", dbUser.UserName, dbUser.ChatID)
 		um.LoadDatabaseUserIntoBotUsers(dbUser)
 	}
 
@@ -102,7 +102,7 @@ func (um *Manager) LoadDatabaseUserIntoBotUsers(dbUser *models.DbUser) *User {
 	if botUser.Connected { // need to connect
 		err := botUser.connectMqttAndSubscribe()
 		if err != nil {
-			log.Printf("User %v connect MQTT error: %v", botUser.UserName, err)
+			log.Printf("User %v (Chat.ID %v) connect MQTT error: %v", botUser.UserName, botUser.ChatID, err)
 			botUser.setConnected(false)
 		}
 	}

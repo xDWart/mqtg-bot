@@ -73,7 +73,7 @@ func (user *User) subscribe(newSubscription *models.Subscription) int32 {
 	user.db.Create(newSubscription)
 	user.mqtt.Subscribe(newSubscription)
 	user.Subscriptions = append(user.Subscriptions, newSubscription)
-	log.Printf("User %v subscribed to the topic %v, new subscription: %+v", user.UserName, newSubscription.Topic, *newSubscription)
+	log.Printf("User %v (Chat.ID %v) subscribed to the topic %v, new subscription: %+v", user.UserName, user.ChatID, newSubscription.Topic, *newSubscription)
 
 	return int32(len(user.Subscriptions) - 1)
 }
@@ -82,13 +82,13 @@ func (user *User) unsubscribe(subscription *models.Subscription, subscriptionInd
 	user.mqtt.Unsubscribe(subscription)
 	user.db.Delete(subscription)
 	user.Subscriptions = append(user.Subscriptions[:subscriptionIndex], user.Subscriptions[subscriptionIndex+1:]...)
-	log.Printf("User %v unsubscribed from the topic %v", user.UserName, subscription.Topic)
+	log.Printf("User %v (Chat.ID %v) unsubscribed from the topic %v", user.UserName, user.ChatID, subscription.Topic)
 }
 
 func (user *User) publish(payload interface{}) {
 	topic := user.state.PublishingTopic
 	user.mqtt.Publish(topic, user.state.Qos, user.state.Retained, payload)
-	log.Printf("User %v published to the topic %v", user.UserName, topic)
+	log.Printf("User %v (Chat.ID %v) published to the topic %v", user.UserName, user.ChatID, topic)
 }
 
 func (user *User) setConnected(value bool) {
@@ -128,10 +128,10 @@ func (user *User) connectMqttAndSubscribe() error {
 	}
 	user.setConnected(true)
 	user.saveMqttUrl()
-	log.Printf("Connect user %v to mqtt", user.UserName)
+	log.Printf("Connect user %v (Chat.ID %v) to mqtt", user.UserName, user.ChatID)
 
 	for _, subscription := range user.Subscriptions {
-		log.Printf("Subscribe user %v to the topic %v", user.UserName, subscription.Topic)
+		log.Printf("Subscribe user %v (Chat.ID %v) to the topic %v", user.UserName, user.ChatID, subscription.Topic)
 		subscription.UserMutex = &user.Mutex
 		user.mqtt.Subscribe(subscription)
 	}
