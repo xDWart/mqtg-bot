@@ -4,11 +4,5 @@ go:
   - 1.14.x
   - 1.15.x
 
-before_script:
-  - ./test.sh
-
 script:
   - go build -mod vendor main.go
-
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
