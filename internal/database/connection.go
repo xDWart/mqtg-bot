@@ -22,7 +22,7 @@ func NewDatabaseConnection() *gorm.DB {
 
 		db, err = NewSQLiteConnection()
 		if err != nil {
-			log.Fatal("Couldn't also init SQLite connection: %+v", err)
+			log.Fatalf("Couldn't also init SQLite connection: %v", err)
 		}
 	}
 
