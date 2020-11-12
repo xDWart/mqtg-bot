@@ -23,11 +23,11 @@ func (menu *MainMenu) AppendCommonMenuAndSetParentLinks() {
 	menu.ResetCurrentPath()
 }
 
-func (menu *MainMenu) GenerateJsonb() ([]byte, error) {
+func (menu *MainMenu) Marshal() ([]byte, error) {
 	return json.Marshal(menu.UserButtons)
 }
 
-func (menu *MainMenu) LoadMenuFromJsonb(data []byte) {
+func (menu *MainMenu) Unmarshal(data []byte) {
 	err := json.Unmarshal(data, &menu.UserButtons)
 	if err != nil {
 		log.Printf("Unmarshal error: %v", err)

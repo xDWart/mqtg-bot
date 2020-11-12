@@ -140,7 +140,7 @@ func (user *User) connectMqttAndSubscribe() error {
 }
 
 func (user *User) SaveMenuIntoDB() {
-	jsonMenu, err := user.menu.GenerateJsonb()
+	jsonMenu, err := user.menu.Marshal()
 	if err != nil {
 		log.Printf("Menu marshal error: %v. Menu: %#v", err, user.menu.UserButtons)
 		return

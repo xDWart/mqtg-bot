@@ -94,7 +94,7 @@ func (um *Manager) LoadDatabaseUserIntoBotUsers(dbUser *models.DbUser) *User {
 	}
 
 	if len(dbUser.DbMenu) > 0 {
-		botUser.menu.LoadMenuFromJsonb(dbUser.DbMenu)
+		botUser.menu.Unmarshal(dbUser.DbMenu)
 	}
 
 	botUser.menu.AppendCommonMenuAndSetParentLinks()
