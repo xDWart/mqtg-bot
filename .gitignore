@@ -4,3 +4,5 @@ playground
 db-data
 main
 mqtg.db
+coverage.txt
+profile.out

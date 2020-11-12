@@ -4,8 +4,10 @@ go:
   - 1.14.x
   - 1.15.x
 
-script:
+before_script:
   - ./test.sh
+
+script:
   - go build -mod vendor main.go
 
 after_success:
