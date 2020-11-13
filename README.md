@@ -9,7 +9,6 @@
 
 ## Articles
 
-- [Flexible MQTT-telegram-bot for IoT](https://xd-wart.medium.com/flexible-mqtt-telegram-bot-for-iot-70d567edfb2e) (En, Medium)
 - [(Не)очередной MQTT-телеграм-бот для IoT](https://habr.com/ru/post/526672/) (Ru, Habr)
 
 ## Introduction
