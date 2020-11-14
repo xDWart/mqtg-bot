@@ -1,6 +1,6 @@
 # mqtg-bot
 
-[![Build Status](https://travis-ci.com/xDWart/mqtg-bot.svg?branch=master)](https://travis-ci.com/xDWart/mqtg-bot)
+[![Build Status](https://github.com/xDWart/mqtg-bot/workflows/Build/badge.svg)](https://github.com/xDWart/mqtg-bot/actions?query=workflow%3ABuild)
 [![Go Report Card](https://goreportcard.com/badge/github.com/xDWart/mqtg-bot)](https://goreportcard.com/report/github.com/xDWart/mqtg-bot)
 [![Version](https://img.shields.io/github/go-mod/go-version/xDWart/mqtg-bot)](go.mod)
 [![License](https://img.shields.io/github/license/xDWart/mqtg-bot)](LICENSE)
