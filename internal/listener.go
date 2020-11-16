@@ -77,6 +77,11 @@ func (bot *TelegramBot) StartBotListener() {
 					log.Printf("Store new subscription %v data: %v", subStr, string(newData.Data))
 				}
 				bot.db.Create(&newData)
+
+				// to limit rows count for free heroku plan
+				if bot.maxSubDataCount > 0 && bot.maxSubDataCount < newData.ID {
+					bot.db.Exec("DELETE FROM subscription_data WHERE id <= ?", newData.ID-bot.maxSubDataCount)
+				}
 			}
 
 			// need print

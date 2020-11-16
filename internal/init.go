@@ -24,6 +24,8 @@ type TelegramBot struct {
 	wg              *sync.WaitGroup
 	shutdownChannel chan interface{}
 	metrics         Metrics
+
+	maxSubDataCount uint
 }
 
 func InitTelegramBot() *TelegramBot {
@@ -48,6 +50,14 @@ func InitTelegramBot() *TelegramBot {
 
 	if os.Getenv("BOT_DEBUG") == "true" {
 		bot.Debug = true
+	}
+
+	maxSubDataCount := os.Getenv("MAX_SUB_DATA_COUNT")
+	if len(maxSubDataCount) > 0 {
+		count, err := strconv.Atoi(maxSubDataCount)
+		if err == nil && count > 0 {
+			bot.maxSubDataCount = uint(count)
+		}
 	}
 
 	updateConfig := tgbotapi.NewUpdate(0)
