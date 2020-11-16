@@ -80,7 +80,7 @@ func (bot *TelegramBot) StartBotListener() {
 
 				// to limit rows count for free heroku plan
 				if bot.maxSubDataCount > 0 && bot.maxSubDataCount < newData.ID {
-					bot.db.Exec("DELETE FROM subscription_data WHERE id <= ?", newData.ID-bot.maxSubDataCount)
+					bot.db.Unscoped().Delete(models.SubscriptionData{}, "id <= ?", newData.ID-bot.maxSubDataCount)
 				}
 			}
 
