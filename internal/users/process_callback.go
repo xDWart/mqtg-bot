@@ -433,6 +433,7 @@ func (user *User) processChartMenuCallback(callbackData *callback_data.QueryData
 		subscription := user.Subscriptions[subscriptionUserIndex]
 
 		user.db.Where("subscription_data.date_time > ?", thresholdValue).
+		    Where("subscription_data.subscription_id = ?", subscription.ID).
 			Order("subscription_data.date_time").Find(&subscription.CollectedData)
 
 		chartTimeSeries := chart.TimeSeries{
