@@ -9,6 +9,7 @@
 
 ## Articles
 
+- [Development of the Open-Source Telegram Bot for MQTT IoT](https://dzone.com/articles/development-of-the-open-source-telegram-bot-for-mq) (En, DZone.com)
 - [(Не)очередной MQTT-телеграм-бот для IoT](https://habr.com/ru/post/526672/) (Ru, Habr)
 
 ## Introduction
