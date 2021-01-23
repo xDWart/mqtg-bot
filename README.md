@@ -104,7 +104,7 @@ You will need Heroku CLI
 heroku login
 
 # create a new app
-heroku create *YOUR_APP_NAME* --buildpack heroku/go
+heroku create *YOUR_APP_NAME*
 
 # add your new app into git remotes
 heroku git:remote -a *YOUR_APP_NAME*
