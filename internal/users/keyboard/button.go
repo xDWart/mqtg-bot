@@ -226,6 +226,11 @@ func GetButtonsKeyboard(buttonI button_interface.ButtonI, callbackDataPath []int
 			subscriptionTopic = "(not selected)"
 		}
 
+		var nextIndex int32
+		if len(userSubscriptions) > 0 {
+			nextIndex = int32((subscriptionID + 1) % len(userSubscriptions))
+		}
+
 		inlineKeyboard.InlineKeyboard = append(inlineKeyboard.InlineKeyboard,
 			tgbotapi.NewInlineKeyboardRow(
 				tgbotapi.NewInlineKeyboardButtonData(
@@ -243,7 +248,7 @@ func GetButtonsKeyboard(buttonI button_interface.ButtonI, callbackDataPath []int
 						Keyboard: callback_data.KeyboardType_BUTTONS,
 						Path:     callbackDataPath,
 						Action:   callback_data.ActionType_SWITCH_SUBSCRIPTION,
-						IntValue: int32((subscriptionID + 1) % len(userSubscriptions)),
+						IntValue: nextIndex,
 					}.GetBase64ProtoString()),
 			),
 			tgbotapi.NewInlineKeyboardRow(
@@ -280,6 +285,12 @@ func GetButtonsKeyboard(buttonI button_interface.ButtonI, callbackDataPath []int
 			} else {
 				subscription = userSubscriptions[subscriptionUserIndex]
 			}
+
+			var nextIndex int32
+			if len(userSubscriptions) > 0 {
+				nextIndex = int32((subscriptionUserIndex + 1) % len(userSubscriptions))
+			}
+
 			inlineKeyboard.InlineKeyboard = append(inlineKeyboard.InlineKeyboard,
 				tgbotapi.NewInlineKeyboardRow(
 					tgbotapi.NewInlineKeyboardButtonData(
@@ -288,7 +299,7 @@ func GetButtonsKeyboard(buttonI button_interface.ButtonI, callbackDataPath []int
 							Keyboard: callback_data.KeyboardType_BUTTONS,
 							Path:     callbackDataPath,
 							Action:   callback_data.ActionType_SWITCH_SUBSCRIPTION,
-							IntValue: int32((subscriptionUserIndex + 1) % len(userSubscriptions)),
+							IntValue: nextIndex,
 							Index:    int32(subscriptionButtonIndex),
 						}.GetBase64ProtoString()),
 					tgbotapi.NewInlineKeyboardButtonData(
@@ -600,10 +611,15 @@ func GetDeleteSubscriptionKeyboard(currButton button_interface.ButtonI, subscrip
 		return "", nil
 	}
 	subscriptionUserIndex := currButton.GetSubscriptions()[subscriptionButtonIndex]
+
+	var subscription *models.Subscription
 	if subscriptionUserIndex >= len(userSubscriptions) {
-		return "", nil
+		subscription = &models.Subscription{
+			Topic: "(not found)",
+		}
+	} else {
+		subscription = userSubscriptions[subscriptionUserIndex]
 	}
-	subscription := userSubscriptions[subscriptionUserIndex]
 
 	text := fmt.Sprintf("Are you sure you want to delete the subscription <code>%v</code> from chart?", subscription.Topic)
 	inlineKeyboard := tgbotapi.NewInlineKeyboardMarkup(
