@@ -68,8 +68,9 @@ Message [@BotFather](https://telegram.me/BotFather) `/newbot` command to create 
 - `TELEGRAM_BOT_TOKEN` - bot HTTP API access token, required
 - `DATABASE_URL` - Postgres connection string in the following format: `postgres://user:password@host:port/db`
 - `SQLITE_PATH` - path to SQLite database
+- `MQTT_CLIENT_ID` - Client ID to be used. Required for VerneMQ.
 
-Notes: 
+Notes:
 1. Only `TELEGRAM_BOT_TOKEN` env is required
 1. If `DATABASE_URL` env is omitted, or a Postgres connection error occurred, SQLite will be used
 1. If `SQLITE_PATH` env is omitted, `mqtg.db` will be used by default as a SQLite database
@@ -116,7 +117,7 @@ heroku config:set TELEGRAM_BOT_TOKEN=*BOT_ACCESS_TOKEN*
 heroku config:set GOVERSION=go1.15
 
 # attach Postgres add-on
-heroku addons:create heroku-postgresql:hobby-dev 
+heroku addons:create heroku-postgresql:hobby-dev
 
 # push master branch to Heroku
 git push heroku master
@@ -129,17 +130,17 @@ Then just message `/start` to your bot and follow the instructions to configure 
 
 ## Try bot
 
-[@mqtg_bot](https://telegram.me/mqtg_bot)  
+[@mqtg_bot](https://telegram.me/mqtg_bot)
 Message `/start` to him and configure connection to your MQTT broker.
 
 ## Contribution
 
-- Do you have an idea to improve mqtg-bot? -> [Create an issue](https://github.com/xDWart/mqtg-bot/issues/new/choose).     
-- Have you discovered a bug? -> [Create an issue](https://github.com/xDWart/mqtg-bot/issues/new/choose).   
-- Have you already coded something for mqtg-bot? -> [Create a pull request](https://github.com/xDWart/mqtg-bot/compare).   
+- Do you have an idea to improve mqtg-bot? -> [Create an issue](https://github.com/xDWart/mqtg-bot/issues/new/choose).
+- Have you discovered a bug? -> [Create an issue](https://github.com/xDWart/mqtg-bot/issues/new/choose).
+- Have you already coded something for mqtg-bot? -> [Create a pull request](https://github.com/xDWart/mqtg-bot/compare).
 
 ## Licence
 
-- mqtg-bot is licensed under the MIT License.   
-- See [LICENSE](LICENSE) for the full license text.   
+- mqtg-bot is licensed under the MIT License.
+- See [LICENSE](LICENSE) for the full license text.
 - Copyright (c) Anatoliy Bezgubenko

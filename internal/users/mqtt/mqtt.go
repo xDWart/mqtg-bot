@@ -6,6 +6,7 @@ import (
 	"mqtg-bot/internal/models"
 	"net/url"
 	"time"
+	"os"
 )
 
 type Client struct {
@@ -29,7 +30,10 @@ func Connect(dbUser *models.DbUser, subscriptionCh chan SubscriptionMessage) (*C
 	clientOptions.SetUsername(uri.User.Username())
 	password, _ := uri.User.Password()
 	clientOptions.SetPassword(password)
-
+	clientId := os.Getenv("MQTT_CLIENT_ID")
+	if clientId != "" {
+		clientOptions.SetClientID(clientId)
+	}
 	client := mqtt.NewClient(clientOptions)
 
 	token := client.Connect()
