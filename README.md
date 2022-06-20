@@ -128,11 +128,6 @@ heroku ps:scale worker=1
 
 Then just message `/start` to your bot and follow the instructions to configure it.
 
-## Try bot
-
-[@mqtg_bot](https://telegram.me/mqtg_bot)
-Message `/start` to him and configure connection to your MQTT broker.
-
 ## Contribution
 
 - Do you have an idea to improve mqtg-bot? -> [Create an issue](https://github.com/xDWart/mqtg-bot/issues/new/choose).
